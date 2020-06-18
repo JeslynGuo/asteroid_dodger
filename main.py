@@ -3,6 +3,7 @@ import random
 from pygame.locals import * 
 import sys
 from ship import Ship 
+from asteroid import Asteroid
 
 pygame.init()
 
@@ -21,8 +22,31 @@ player = Ship ((20,200))
 NumLevels = 4
 Level = 1
 
+asteroids = pygame.sprite.Group()
+asteroid_count = 3
+
+def init():
+  global asteroids, asteroid_count
+  player.reset((20, 200))
+  asteroids.empty()
+  asteroid_count += 3
+  for i in range(asteroid_count):
+    asteroids.add(
+      Asteroid(
+        # pos (x,y)
+        (
+          random.randint(50, width-50),
+          random.randint(50, height-50)
+        ),
+        #scale 
+        random.choice([0.1,0.09,0.08])
+      )
+    )
+
 def main():
   global Level, NumLevels
+
+  init()
 
   while Level < NumLevels:
     clock.tick(60)
@@ -45,9 +69,12 @@ def main():
           player.speed[1] = 0
         if event.key == pygame.K_DOWN:
           player.speed[1] = 0
+
     # draw sprites and add colors to screen, UI
     player.update()
+    asteroids.update()
     screen.fill(color)
+    asteroids.draw(screen)
     screen.blit(player.image, player.rect)
     pygame.display.flip()
 
