@@ -24,6 +24,6 @@ class Asteroid(pygame.sprite.Sprite):
       self.rect.move_ip((self.speed[0],0))
       self.image = pygame.transform.flip(self.image, True, False)
     if self.rect.top < 0 or self.rect.bottom > screen_info.current_h:
-      self.speed[0] *= -1
+      self.speed[1] *= -1
       self.rect.move_ip((0, self.speed[1]))
       self.image = pygame.transform.flip(self.image, True, False)

@@ -10,7 +10,7 @@ pygame.init()
 # screen display
 screen_info = pygame.display.Info()
 # set width and height of the screen
-screen_size = (width, height) = int(screen_info.current_w), int(screen_info.current_h)
+screen_size = (width, height) = (int(screen_info.current_w), int(screen_info.current_h))
 screen = pygame.display.set_mode(screen_size)
 clock = pygame.time.Clock()
 color = (0, 127, 255)
@@ -39,9 +39,20 @@ def init():
           random.randint(50, height-50)
         ),
         #scale 
-        random.choice([0.1,0.09,0.08])
+        random.choice([0.07,0.09,0.08])
       )
     )
+
+def win():
+  font = pygame.font.SysFont(None, 70)
+  text = font.render("You escaped!", True, (225, 0, 0))
+  text_rect = text.get_rect()
+  text_rect.center = (width // 2, height //2)
+  while True:
+    clock.tick(60)
+    screen.fill(color)
+    screen.blit(text, text_rect)
+    pygame.display.flip()
 
 def main():
   global Level, NumLevels
@@ -70,6 +81,16 @@ def main():
         if event.key == pygame.K_DOWN:
           player.speed[1] = 0
 
+    # check for collision
+    player_hit = pygame.sprite.spritecollide (player, asteroids, False)
+
+    if player.checkReset(width):
+      Level += 1
+      init()
+      print(Level)
+    elif player_hit:
+      player.reset((20, 200))
+
     # draw sprites and add colors to screen, UI
     player.update()
     asteroids.update()
@@ -78,5 +99,7 @@ def main():
     screen.blit(player.image, player.rect)
     pygame.display.flip()
 
+  win()
+  
 if __name__ == '__main__':
   main()
